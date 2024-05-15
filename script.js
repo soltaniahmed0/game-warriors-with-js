@@ -1,6 +1,7 @@
 // Define the Warrior class
 class Warrior {
-  constructor(imageUrl, resourceCost,color) {
+  constructor(id, imageUrl, resourceCost, color) {
+    this.id = id; // Unique ID for the warrior
     this.strength = 10;
     this.healthPoints = 100;
     this.imageUrl = imageUrl; // Image URL for the warrior
@@ -20,16 +21,16 @@ class Warrior {
 
 // Define the Elf class inheriting from Warrior
 class Elf extends Warrior {
-  constructor(color) {
-    super("elf.png", 2,color); // Image URL and resource cost for Elf
+  constructor(id,color) {
+    super(id,color==='red'?"elf.png":"blueelf.png", 2,color); // Image URL and resource cost for Elf
     this.strength *= 2; // Elf's strength is twice the base strength
   }
 }
 
 // Define the Dwarf class inheriting from Warrior
 class Nain extends Warrior {
-  constructor(color) {
-    super("dwarf.png", 1,color); // Image URL and resource cost for Dwarf
+  constructor(id,color) {
+    super(id,color==='red'?"rnain.png":"bnain.png", 1,color); // Image URL and resource cost for Dwarf
     this.healthPoints *= 2; // Dwarf has double the health points
   }
 
@@ -41,9 +42,9 @@ class Nain extends Warrior {
 
 // Define the ChiefElf class inheriting from Elf
 class ChiefElf extends Elf {
-  constructor(color) {
-    super(color);
-    this.imageUrl = "chief-elf.png"; // Image URL for Chief Elf
+  constructor(id,color) {
+    super(id,color);
+    this.imageUrl = color==='red'?"rchefelf.png":"bchefelf.png"; // Image URL for Chief Elf
     this.resourceCost = 4; // Resource cost for Chief Elf
     this.strength *= 2; // Chief Elf's strength is twice the Elf's strength
   }
@@ -51,9 +52,9 @@ class ChiefElf extends Elf {
 
 // Define the ChiefDwarf class inheriting from Dwarf
 class ChiefNain extends Nain {
-  constructor(color) {
-    super(color);
-    this.imageUrl = "chief-nain.png"; // Image URL for Chief Dwarf
+  constructor(id,color) {
+    super(id,color);
+    this.imageUrl = color==='red'?"rchefnain.png":"bchefnain.png"; // Image URL for Chief Dwarf
     this.resourceCost = 3; // Resource cost for Chief Dwarf
     this.healthPoints *= 2; // Chief Dwarf has double the health points
   }
@@ -74,20 +75,23 @@ class Chateau {
   }
 
   // Method to create an instance of the warrior based on the type
-  createWarriorInstance(warriorType, color) {
-    switch (warriorType) {
-      case "elf":
-        return new Elf(color);
-      case "chief-elf":
-        return new ChiefElf(color);
-      case "nain":
-        return new Nain(color);
-      case "chief-nain":
-        return new ChiefNain(color);
-      default:
-        throw new Error("Invalid warrior type.");
-    }
+  // Method to create an instance of the warrior based on the type
+createWarriorInstance(warriorType, color) {
+  const id = Date.now() + Math.random(); // Generate a unique ID
+  switch (warriorType) {
+    case "elf":
+      return new Elf(id, color);
+    case "chief-elf":
+      return new ChiefElf(id, color);
+    case "nain":
+      return new Nain(id, color);
+    case "chief-nain":
+      return new ChiefNain(id, color);
+    default:
+      throw new Error("Invalid warrior type.");
   }
+}
+
 
   // Method to add warriors to the castle
   addWarrior(warriorType) {
@@ -198,6 +202,7 @@ function displayWarriorsOnTrack() {
       const tileIndex = warrior.position - 1; // Adjust position to match array index
       const tile = document.getElementById(`p${tileIndex + 1}`); // Get corresponding tile element
       const warriorImage = document.createElement('img'); // Create image element for the warrior
+      warriorImage.classList.add('img'); // Add class name 'img' to the image element
       warriorImage.src = warrior.imageUrl; // Set image source
       warriorImage.alt = warrior.constructor.name; // Set image alt attribute
       tile.appendChild(warriorImage); // Append warrior image to the tile
@@ -263,21 +268,28 @@ document.getElementById("move").addEventListener("click", function() {
   moveWarriorsOneStep(); // Call the moveWarriorsOneStep function when the button is clicked
 });
 function startFight() {
+  let iterationCount = 0; 
   // Loop until one team is defeated
   while (true) {
     // Get the positions of blue and red warriors
-    const bluePositions = blueCastle.warriors.map(warrior => warrior.position);
-    const redPositions = redCastle.warriors.map(warrior => warrior.position);
-
+    var bluePositions = blueCastle.warriors.map(warrior => warrior.position);
+    var redPositions = redCastle.warriors.map(warrior => warrior.position);
+    iterationCount++;
     // Find positions where blue and red warriors meet
     const meetingPositions = bluePositions.filter(position => redPositions.includes(position));
-
+    console.log(`Meeting positions: ${meetingPositions}`);
+    console.log(`Iteration count: ${iterationCount}`);
     // Iterate over meeting positions to simulate fights
+    if (meetingPositions.length === 0) {
+      break; // Break the loop if there are no meeting positions left
+    }
     meetingPositions.forEach(position => {
       // Find blue and red warriors at this position
       const blueWarriors = blueCastle.warriors.filter(warrior => warrior.position === position);
       const redWarriors = redCastle.warriors.filter(warrior => warrior.position === position);
-
+      console.log("Blue warriors:", blueWarriors);
+      console.log("Red warriors:", redWarriors);
+      console.log("blue attack now ");
       // Blue warriors attack red warriors first
       blueWarriors.forEach(blueWarrior => {
         // Find the first living red warrior
@@ -287,7 +299,21 @@ function startFight() {
           fight(blueWarrior, targetRedWarrior);
         }
       });
-
+      // Check if any red warriors at this position are defeated
+      redWarriors.forEach(redWarrior => {
+        if (redWarrior.healthPoints <= 0) {
+          console.log(redWarrior.healthPoints);
+          const index = redWarriors.findIndex(warrior => warrior.id === redWarrior.id);
+          if (index !== -1) {
+            // Remove the defeated warrior from the redWarriors array by ID
+            redWarriors.splice(index, 1);
+            // Also remove from the redCastle's warriors array
+            redCastle.warriors = redCastle.warriors.filter(warrior => warrior.id !== redWarrior.id);
+          }
+        }
+      });
+      
+      console.log("red attack now ");
       // Red warriors attack blue warriors
       redWarriors.forEach(redWarrior => {
         // Find the first living blue warrior
@@ -301,20 +327,22 @@ function startFight() {
       // Check if any blue warriors at this position are defeated
       blueWarriors.forEach(blueWarrior => {
         if (blueWarrior.healthPoints <= 0) {
-          const index = blueCastle.warriors.indexOf(blueWarrior);
-          blueCastle.warriors.splice(index, 1); // Remove the defeated warrior from the castle's warriors array
+          console.log(blueWarrior.healthPoints);
+          const index = blueWarriors.findIndex(warrior => warrior.id === blueWarrior.id);
+          if (index !== -1) {
+            // Remove the defeated warrior from the blueWarriors array by ID
+            blueWarriors.splice(index, 1);
+            // Also remove from the blueCastle's warriors array
+            blueCastle.warriors = blueCastle.warriors.filter(warrior => warrior.id !== blueWarrior.id);
+          }
         }
       });
 
-      // Check if any red warriors at this position are defeated
-      redWarriors.forEach(redWarrior => {
-        if (redWarrior.healthPoints <= 0) {
-          const index = redCastle.warriors.indexOf(redWarrior);
-          redCastle.warriors.splice(index, 1); // Remove the defeated warrior from the castle's warriors array
-        }
-      });
+      
+      console.log("Blue warriors:", blueWarriors);
+       console.log("Red warriors:", redWarriors);
     });
-
+    
     // Check if blue team is defeated
     if (blueCastle.warriors.length === 0) {
       alert('Red team wins!');
@@ -326,13 +354,22 @@ function startFight() {
       alert('Blue team wins!');
       break; // End the fight
     }
+    
   }
-  redCastle.resources+=2;
-  blueCastle.resources+=2;
+
+  redCastle.resources += 1;
+  blueCastle.resources += 1;
+  updateBlueResources();
+  updateRedResources();
 }
 
 
+
 function fight(attacker, defender) {
+  // Store the list of warriors before the battle
+  const initialBlueWarriors = [...blueCastle.warriors];
+  const initialRedWarriors = [...redCastle.warriors];
+
   // Calculate damage for the attacker
   const damage = attacker.calculateDamage();
 
@@ -341,10 +378,19 @@ function fight(attacker, defender) {
 
   // Check if the defender is defeated
   if (defender.healthPoints <= 0) {
-    console.log(`${defender.constructor.name} has been defeated!`);
+    console.log(`${defender.constructor.name} with ID ${defender.id} has been defeated!`);
+    
     // Remove the defeated warrior from their castle's warriors array
     const castle = defender.color === 'blue' ? blueCastle : redCastle;
-    castle.warriors = castle.warriors.filter(warrior => warrior !== defender);
+    castle.warriors = castle.warriors.filter(warrior => warrior.id !== defender.id);
+
+    // Log the list of warriors before and after the battle
+    console.log(`List of blue warriors before battle:`, initialBlueWarriors);
+    console.log(`List of red warriors before battle:`, initialRedWarriors);
+    console.log(`List of blue warriors after battle:`, blueCastle.warriors);
+    console.log(`List of red warriors after battle:`, redCastle.warriors);
   }
 }
+
+
 
