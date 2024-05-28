@@ -135,6 +135,7 @@ createWarriorInstance(warriorType, color) {
 // Create instances of Chateau for red and blue castles
 const redCastle = new Chateau("red");
 const blueCastle = new Chateau("blue");
+var points;
 
 // Function to update resources display for blue castle
 function updateBlueResources() {
@@ -280,7 +281,7 @@ function checkMeetings() {
 
 
   if (maxBluePosition==maxRedPosition) {
-    //alert(`Meeting detected at position ${maxRedPosition}!`);
+    alert(`Meeting detected at position ${maxRedPosition}!`);
     startFight();
   }
 }
@@ -295,98 +296,105 @@ function startFight() {
   let iterationCount = 0; 
   // Loop until one team is defeated
   while (true) {
-    // Get the positions of blue and red warriors
-    var bluePositions = blueCastle.warriors.map(warrior => warrior.position);
-    var redPositions = redCastle.warriors.map(warrior => warrior.position);
-    iterationCount++;
-    // Find positions where blue and red warriors meet
-    const meetingPositions = bluePositions.filter(position => redPositions.includes(position));
-    console.log(`Meeting positions: ${meetingPositions}`);
-    console.log(`Iteration count: ${iterationCount}`);
-    // Iterate over meeting positions to simulate fights
-    if (meetingPositions.length === 0) {
-      break; // Break the loop if there are no meeting positions left
-    }
-    meetingPositions.forEach(position => {
-      // Find blue and red warriors at this position
-      const blueWarriors = blueCastle.warriors.filter(warrior => warrior.position === position);
-      const redWarriors = redCastle.warriors.filter(warrior => warrior.position === position);
-      console.log("Blue warriors:", blueWarriors);
-      console.log("Red warriors:", redWarriors);
-      console.log("blue attack now ");
-      // Blue warriors attack red warriors first
-      blueWarriors.forEach(blueWarrior => {
-        // Find the first living red warrior
-        const targetRedWarrior = redWarriors.find(redWarrior => redWarrior.healthPoints > 0);
-        // If there is a living red warrior, let blue warrior attack
-        if (targetRedWarrior) {
-          fight(blueWarrior, targetRedWarrior);
-        }
-        await sleep(5000);
-      });
-      // Check if any red warriors at this position are defeated
-      redWarriors.forEach(redWarrior => {
-        if (redWarrior.healthPoints <= 0) {
-          console.log(redWarrior.healthPoints);
-          const index = redWarriors.findIndex(warrior => warrior.id === redWarrior.id);
-          if (index !== -1) {
-            // Remove the defeated warrior from the redWarriors array by ID
-            redWarriors.splice(index, 1);
-            // Also remove from the redCastle's warriors array
-            redCastle.warriors = redCastle.warriors.filter(warrior => warrior.id !== redWarrior.id);
+      // Get the positions of blue and red warriors
+      var bluePositions = blueCastle.warriors.map(warrior => warrior.position);
+      var redPositions = redCastle.warriors.map(warrior => warrior.position);
+      iterationCount++;
+      // Find positions where blue and red warriors meet
+      const meetingPositions = bluePositions.filter(position => redPositions.includes(position));
+      console.log(`Meeting positions: ${meetingPositions}`);
+      console.log(`Iteration count: ${iterationCount}`);
+      // Iterate over meeting positions to simulate fights
+      if (meetingPositions.length === 0) {
+          break; // Break the loop if there are no meeting positions left
+      }
+      for (const position of meetingPositions) {
+          // Find blue and red warriors at this position
+          const blueWarriors = blueCastle.warriors.filter(warrior => warrior.position === position);
+          const redWarriors = redCastle.warriors.filter(warrior => warrior.position === position);
+          console.log("Blue warriors:", blueWarriors);
+          console.log("Red warriors:", redWarriors);
+          console.log("Blue attack now ");
+          // Blue warriors attack red warriors first
+          for (const blueWarrior of blueWarriors) {
+              // Find the first living red warrior
+              const targetRedWarrior = redWarriors.find(redWarrior => redWarrior.healthPoints > 0);
+              // If there is a living red warrior, let blue warrior attack
+              if (targetRedWarrior) {
+                  fight(blueWarrior, targetRedWarrior);
+              }
+              
           }
-        }
-      });
-      
-      console.log("red attack now ");
-      // Red warriors attack blue warriors
-      redWarriors.forEach(redWarrior => {
-        // Find the first living blue warrior
-        const targetBlueWarrior = blueWarriors.find(blueWarrior => blueWarrior.healthPoints > 0);
-        // If there is a living blue warrior, let red warrior attack
-        if (targetBlueWarrior) {
-          fight(redWarrior, targetBlueWarrior);
-        }
-        await sleep(1000);
-      });
-      
-      // Check if any blue warriors at this position are defeated
-      blueWarriors.forEach(blueWarrior => {
-        if (blueWarrior.healthPoints <= 0) {
-          console.log(blueWarrior.healthPoints);
-          const index = blueWarriors.findIndex(warrior => warrior.id === blueWarrior.id);
-          if (index !== -1) {
-            // Remove the defeated warrior from the blueWarriors array by ID
-            blueWarriors.splice(index, 1);
-            // Also remove from the blueCastle's warriors array
-            blueCastle.warriors = blueCastle.warriors.filter(warrior => warrior.id !== blueWarrior.id);
+          // Check if any red warriors at this position are defeated
+          for (const redWarrior of redWarriors) {
+              if (redWarrior.healthPoints <= 0) {
+                  console.log(redWarrior.healthPoints);
+                  points=redWarrior.healthPoints;
+                  console.log(points);
+                  const index = redWarriors.findIndex(warrior => warrior.id === redWarrior.id);
+                  if (index !== -1) {
+                      // Remove the defeated warrior from the redWarriors array by ID
+                      redWarriors.splice(index, 1);
+                      // Also remove from the redCastle's warriors array
+                      redCastle.warriors = redCastle.warriors.filter(warrior => warrior.id !== redWarrior.id);
+                  }
+                  if (index!==-1){
+                    redWarriors[1].healthPoints+=points
+                  }
+              }
           }
-        }
-      });
+          
+          console.log("Red attack now ");
+          // Red warriors attack blue warriors
+          for (const redWarrior of redWarriors) {
+              // Find the first living blue warrior
+              const targetBlueWarrior = blueWarriors.find(blueWarrior => blueWarrior.healthPoints > 0);
+              // If there is a living blue warrior, let red warrior attack
+              if (targetBlueWarrior) {
+                  fight(redWarrior, targetBlueWarrior);
+              }
+          }
+          
+          // Check if any blue warriors at this position are defeated
+          for (const blueWarrior of blueWarriors) {
+              if (blueWarrior.healthPoints <= 0) {
+                  console.log(blueWarrior.healthPoints);
+                  const index = blueWarriors.findIndex(warrior => warrior.id === blueWarrior.id);
+                  if (index !== -1) {
+                      // Remove the defeated warrior from the blueWarriors array by ID
+                      blueWarriors.splice(index, 1);
+                      // Also remove from the blueCastle's warriors array
+                      blueCastle.warriors = blueCastle.warriors.filter(warrior => warrior.id !== blueWarrior.id);
+                  }
+              }
+          }
 
+          console.log("Blue warriors:", blueWarriors);
+          console.log("Red warriors:", redWarriors);
+      }
       
-      console.log("Blue warriors:", blueWarriors);
-       console.log("Red warriors:", redWarriors);
-    });
-    
-    // Check if blue team is defeated
-    if (blueCastle.warriors.length === 0) {
-      alert('Red team wins!');
-      break; // End the fight
-    }
+      // Check if blue team is defeated
+      if (blueCastle.warriors.length === 0) {
+          alert('Red team wins!');
+          break; // End the fight
+      }
 
-    // Check if red team is defeated
-    if (redCastle.warriors.length === 0) {
-      alert('Blue team wins!');
-      break; // End the fight
-    }
-    
+      // Check if red team is defeated
+      if (redCastle.warriors.length === 0) {
+          alert('Blue team wins!');
+          break; // End the fight
+      }
   }
 
   redCastle.resources += 1;
   blueCastle.resources += 1;
   updateBlueResources();
   updateRedResources();
+}
+
+// Define the sleep function
+function sleep(milliseconds) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds));
 }
 
 
@@ -404,6 +412,7 @@ function fight(attacker, defender) {
   
   // Check if the defender is defeated
   if (defender.healthPoints <= 0) {
+    
     console.log(`${defender.constructor.name} with ID ${defender.id} has been defeated!`);
     
     // Remove the defeated warrior from their castle's warriors array
