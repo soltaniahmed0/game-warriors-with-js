@@ -103,7 +103,7 @@ createWarriorInstance(warriorType, color) {
       this.warriors.push(this.createWarriorInstance(warriorType, this.color));
       console.log(this.resources);
       this.showWarriorPositions(); // Display warrior positions
-      this.showWarriorList(); // Update the warrior list display
+      //this.showWarriorList(); // Update the warrior list display
     } else {
       console.log("Not enough resources to add this warrior.");
     }
@@ -111,7 +111,7 @@ createWarriorInstance(warriorType, color) {
   }
 
   // Method to display the list of warriors in the castle
-  showWarriorList() {
+ /* showWarriorList() {
     const listElement = document.getElementById(`${this.color}-warrior-list`);
     listElement.innerHTML = ""; // Clear previous list
     this.warriors.forEach(warrior => {
@@ -119,7 +119,7 @@ createWarriorInstance(warriorType, color) {
       listItem.textContent = warrior.constructor.name; // Display warrior's class name
       listElement.appendChild(listItem);
     });
-  }
+  }*/
   // Method to display the positions of warriors in the console
   showWarriorPositions() {
     console.log(`Positions of ${this.color} warriors:`);
@@ -189,7 +189,6 @@ document.querySelector(".Rchief-nain").addEventListener("click", function() {
   updateRedResources();
 });
 
-// Function to display warriors on the track
 function displayWarriorsOnTrack() {
   // Clear previous warrior positions
   document.querySelectorAll('.tile').forEach(tile => {
@@ -201,14 +200,39 @@ function displayWarriorsOnTrack() {
     castle.warriors.forEach(warrior => {
       const tileIndex = warrior.position - 1; // Adjust position to match array index
       const tile = document.getElementById(`p${tileIndex + 1}`); // Get corresponding tile element
+      const warriorContainer = document.createElement('div'); // Create a container for the warrior and health bar
+      warriorContainer.classList.add('warrior-container'); // Add class name 'warrior-container' to the container
+      
       const warriorImage = document.createElement('img'); // Create image element for the warrior
       warriorImage.classList.add('img'); // Add class name 'img' to the image element
       warriorImage.src = warrior.imageUrl; // Set image source
       warriorImage.alt = warrior.constructor.name; // Set image alt attribute
-      tile.appendChild(warriorImage); // Append warrior image to the tile
+      
+      const healthBar = document.createElement('div'); // Create health bar element
+      healthBar.classList.add('health-bar'); // Add class name 'health-bar' to the health bar element
+      
+      if (warrior.healthPoints <= 100) {
+        healthBar.style.width = `${warrior.healthPoints}%`; // Set width based on warrior's health points
+      } else {
+        const fullHealthBar = document.createElement('div'); // Create a full health bar element
+        fullHealthBar.classList.add('full-health-bar'); // Add class name 'full-health-bar'
+        fullHealthBar.style.width = '100%'; // Set width to 100%
+        healthBar.appendChild(fullHealthBar); // Append full health bar to the health bar container
+
+        const extraHealthBar = document.createElement('div'); // Create an extra health bar element for remaining health
+        extraHealthBar.classList.add('extra-health-bar'); // Add class name 'extra-health-bar'
+        extraHealthBar.style.width = `${warrior.healthPoints - 100}%`; // Set width based on remaining health
+        healthBar.appendChild(extraHealthBar); // Append extra health bar to the health bar container
+      }
+      
+      warriorContainer.appendChild(warriorImage); // Append warrior image to the container
+      warriorContainer.appendChild(healthBar); // Append health bar to the container
+      tile.appendChild(warriorContainer); // Append warrior container to the tile
     });
   });
 }
+
+
 
 // Function to move warriors one step on the track
 // Function to move warriors one step on the track
@@ -256,7 +280,7 @@ function checkMeetings() {
 
 
   if (maxBluePosition==maxRedPosition) {
-    alert(`Meeting detected at position ${maxRedPosition}!`);
+    //alert(`Meeting detected at position ${maxRedPosition}!`);
     startFight();
   }
 }
@@ -298,6 +322,7 @@ function startFight() {
         if (targetRedWarrior) {
           fight(blueWarrior, targetRedWarrior);
         }
+        await sleep(5000);
       });
       // Check if any red warriors at this position are defeated
       redWarriors.forEach(redWarrior => {
@@ -322,6 +347,7 @@ function startFight() {
         if (targetBlueWarrior) {
           fight(redWarrior, targetBlueWarrior);
         }
+        await sleep(1000);
       });
       
       // Check if any blue warriors at this position are defeated
@@ -375,7 +401,7 @@ function fight(attacker, defender) {
 
   // Inflict damage on the defender
   defender.healthPoints -= damage;
-
+  
   // Check if the defender is defeated
   if (defender.healthPoints <= 0) {
     console.log(`${defender.constructor.name} with ID ${defender.id} has been defeated!`);

@@ -33,20 +33,28 @@
     .tile {
       width: 200px;
       height: 200px;
-      border: 1px solid black;
+      
     }
     .castle.blue-castle {
-      background-color: blue;
-      width: 400px; /* Width of the castle */
-      height: 300px; /* Height of the castle */
-      margin-left: 20px;
+      background-image: url('bc.png'); /* Path to your background image */
+      background-size: cover;         /* Scale the background image to cover the entire container */
+      background-repeat: no-repeat;   /* Prevent the background image from repeating */
+      background-position: center;    /* Center the background image */
+      width: 400px;                   /* Width of the castle */
+      height: 300px; 
+      color: blue;
     }
 
     .castle.red-castle {
-      background-color: red;
-      width: 400px; /* Width of the castle */
-      height: 300px; /* Height of the castle */
+      color: red;
+      background-image: url('rc.png'); /* Path to your background image */
+      background-size: cover;         /* Scale the background image to cover the entire container */
+      background-repeat: no-repeat;   /* Prevent the background image from repeating */
+      background-position: center;    /* Center the background image */
+      width: 400px;                   /* Width of the castle */
+      height: 300px;                  /* Height of the castle */
     }
+
     .castle h2 {
       text-align: center; /* Center the text */
       font-weight: bold; /* Make the text bold */
@@ -74,6 +82,19 @@
       width: 100px;
       height: 100px;
     }
+    .health-bar {
+      height: 10px; /* Set height of the health bar */
+      background-color: green; /* Set background color of the health bar */
+    }
+    body{
+
+      background-image: url("bg1.jpg");
+    background-size: cover;        /* Scale the background image to cover the entire container */
+    background-repeat: no-repeat;  /* Prevent the background image from repeating */
+    background-position: center;   /* Center the background image */
+    background-attachment: fixed;  /* Keep the background image fixed when scrolling */
+    }
+
   </style>
 </head>
 <body>
@@ -90,7 +111,7 @@
           <button class="Bnain">Nain</button>
           <button class="Bchief-nain">Chef Nain</button>
         </div>
-        <ul id="blue-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
+        <!--<ul id="blue-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
       </div>
       <button id="move">move</button>
       <div class="castle red-castle">
@@ -102,7 +123,7 @@
           <button class="Rnain">Nain</button>
           <button class="Rchief-nain">Chef Nain</button>
         </div>
-        <ul id="red-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
+        <!--<ul id="red-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
       </div>
       
     </div>
