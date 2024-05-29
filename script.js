@@ -242,20 +242,23 @@ function moveWarriorsOneStep() {
   blueCastle.warriors.forEach(blueWarrior => {
     if (blueWarrior.position < 10) {
       blueWarrior.position++; // Move one step towards p10
-    } else {
-      alert('Blue warriors have reached p10!');
-    }
+    } 
   });
 
   // Check for meetings after blue warriors move
   checkMeetings();
-
+  blueCastle.warriors.forEach(blueWarrior => {
+    if (blueWarrior.position == 10) startpopup("Red");
+    
+  });
   // Move red warriors one step towards p0
   redCastle.warriors.forEach(redWarrior => {
-    if (redWarrior.position > 1) {
+    if (redWarrior.position > 2) {
       redWarrior.position--; // Move one step towards p0
     } else {
-      alert('Red warriors have reached p0!');
+      redWarrior.position--;
+      startpopup("Blue")
+      //alert('Red warriors have reached p0!');
     }
   });
 
@@ -276,8 +279,8 @@ function checkMeetings() {
   const redPositions = redCastle.warriors.map(warrior => warrior.position);
 
   // Find the maximum position among blue and red warriors
-  const maxBluePosition = Math.max(...bluePositions, 0);
-  const maxRedPosition = Math.min(...redPositions, 10);
+  const maxBluePosition = Math.max(...bluePositions, -1);
+  const maxRedPosition = Math.min(...redPositions, 11);
 
 
   if (maxBluePosition==maxRedPosition) {
@@ -338,8 +341,12 @@ function startFight() {
                       // Also remove from the redCastle's warriors array
                       redCastle.warriors = redCastle.warriors.filter(warrior => warrior.id !== redWarrior.id);
                   }
-                  if (index!==-1){
-                    redWarriors[1].healthPoints+=points
+                  console.log(redWarriors.length);
+                  if (redWarriors.length!==0){
+                    console.log('pp'+redWarriors[0].healthPoints);
+                    redWarriors[0].healthPoints+=points
+                    console.log(redWarriors[0].healthPoints);
+                    displayWarriorsOnTrack;
                   }
               }
           }
@@ -429,3 +436,43 @@ function fight(attacker, defender) {
 
 
 
+//*************************************************************************************************************
+function startpopup(a){
+  removeAllEventListeners();
+  const gameOverPopup = document.getElementById('game-over-popup');
+  const restartButton = document.getElementById('restart-button');
+  const gameOverMessage = document.getElementById('game-over-message');
+
+  // Function to show the game over popup
+  function showGameOver(message) {
+      gameOverMessage.textContent = message;
+      gameOverPopup.classList.remove('hidden');
+  }
+
+  // Function to hide the game over popup
+  function hideGameOver() {
+      gameOverPopup.classList.add('hidden');
+  }
+
+  // Event listener for the restart button
+  restartButton.addEventListener('click', () => {
+      hideGameOver();
+      // Add your game restart logic here
+      location.reload();
+      console.log('Restarting the game...');
+  });
+
+  // Example of triggering the game over popup
+  // You can call this function when the game is actually over
+  showGameOver(a+' Castle down You have lost all your health points!');
+
+
+}
+function removeAllEventListeners() {
+  const allElements = document.querySelectorAll('*');
+
+  allElements.forEach(element => {
+      const newElement = element.cloneNode(true);
+      element.parentNode.replaceChild(newElement, element);
+  });
+}
