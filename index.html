@@ -81,10 +81,11 @@
     .tile {
       width: 200px;
       height: 200px;
+      border: solid 1px;
       
     }
     .castle.blue-castle {
-      background-image: url('bc.png'); /* Path to your background image */
+      background-image: url('img/bc.png'); 
       background-size: cover;         /* Scale the background image to cover the entire container */
       background-repeat: no-repeat;   /* Prevent the background image from repeating */
       background-position: center;    /* Center the background image */
@@ -95,7 +96,7 @@
 
     .castle.red-castle {
       color: red;
-      background-image: url('rc.png'); /* Path to your background image */
+      background-image: url('img/rc.png'); /* Path to your background image */
       background-size: cover;         /* Scale the background image to cover the entire container */
       background-repeat: no-repeat;   /* Prevent the background image from repeating */
       background-position: center;    /* Center the background image */
@@ -136,7 +137,7 @@
     }
     body{
 
-      background-image: url("bg1.jpg");
+      background-image: url("img/bg1.jpg");
     background-size: cover;        /* Scale the background image to cover the entire container */
     background-repeat: no-repeat;  /* Prevent the background image from repeating */
     background-position: center;   /* Center the background image */
@@ -154,10 +155,10 @@
         <p>Resources: <span id="blue-resources">3</span></p>
         
         <div class="buttons">
-          <button class="Belf">Elfe</button>
-          <button class="Bchief-elf">Chef Elfe</button>
-          <button class="Bnain">Nain</button>
-          <button class="Bchief-nain">Chef Nain</button>
+          <button class="Belf">Elfe 2</button>
+          <button class="Bchief-elf">Chef Elfe 4</button>
+          <button class="Bnain">Nain 1</button>
+          <button class="Bchief-nain">Chef Nain 3</button>
         </div>
         <!--<ul id="blue-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
       </div>
@@ -166,10 +167,10 @@
         <h2>Red Castle</h2>
         <p>Resources: <span id="red-resources">3</span></p>
         <div class="buttons">
-          <button class="Relf">Elfe</button>
-          <button class="Rchief-elf">Chef Elfe</button>
-          <button class="Rnain">Nain</button>
-          <button class="Rchief-nain">Chef Nain</button>
+          <button class="Relf">Elfe 2</button>
+          <button class="Rchief-elf">Chef Elfe 4</button>
+          <button class="Rnain">Nain 1</button>
+          <button class="Rchief-nain">Chef Nain 3</button>
         </div>
         <!--<ul id="red-warrior-list" class="warrior-list"></ul> <!-- Add warrior list -->
       </div>
@@ -200,7 +201,15 @@
         <button id="restart-button">Restart</button>
     </div>
   </div>
-
+  
+  <script src="./castle.js"></script>
   <script src="./script.js"></script>
+  <script src="./warrior.js"></script>
+  <script src="./fight.js"></script>
+  <script src="./displayontrack.js"></script>
+  <script src="./gameover.js"></script>
+  <script src="./mouve.js"></script>
+
+  
 </body>
 </html>
