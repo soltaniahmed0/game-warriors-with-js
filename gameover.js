@@ -1,4 +1,7 @@
 function startpopup(a){
+    const audio = new Audio("mp3/win.mp3");
+    audio.volume = 0.5;
+    audio.play();
     removeAllEventListeners();
     const gameOverPopup = document.getElementById('game-over-popup');
     const restartButton = document.getElementById('restart-button');

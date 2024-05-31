@@ -70,4 +70,24 @@ function updateResources() {
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  // Initialize audio element
+  const audio = new Audio("mp3/bg.mp3");
+  audio.volume = 0.2;
+  audio.loop = true;
 
+  // Function to toggle audio playback
+  function toggleAudio() {
+      if (audio.paused) {
+          audio.play().catch(error => {
+              console.error('Error playing audio:', error);
+          });
+      } else {
+          audio.pause();
+      }
+  }
+
+  // Add event listener to the play button
+  const playButton = document.getElementById('playButton');
+  playButton.addEventListener('click', toggleAudio);
+});

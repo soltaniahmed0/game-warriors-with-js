@@ -1,27 +1,11 @@
-function startFight() {
+function startFight(meetingPositions) {
     let iterationCount = 0; 
-    // Loop until one team is defeated
     while (true) {
-        // Get the positions of blue and red warriors
-        var bluePositions = blueCastle.warriors.map(warrior => warrior.position);
-        var redPositions = redCastle.warriors.map(warrior => warrior.position);
-        iterationCount++;
-        // Find positions where blue and red warriors meet
-        const meetingPositions = bluePositions.filter(position => redPositions.includes(position));
-        console.log(`Meeting positions: ${meetingPositions}`);
-        console.log(`Iteration count: ${iterationCount}`);
-        // Iterate over meeting positions to simulate fights
-        if (meetingPositions.length === 0) {
-            break; // Break the loop if there are no meeting positions left
-        }
-        for (const position of meetingPositions) {
-            // Find blue and red warriors at this position
-            const blueWarriors = blueCastle.warriors.filter(warrior => warrior.position === position);
-            const redWarriors = redCastle.warriors.filter(warrior => warrior.position === position);
-            console.log("Blue warriors:", blueWarriors);
-            console.log("Red warriors:", redWarriors);
-            console.log("Blue attack now ");
-            // Blue warriors attack red warriors first
+        
+            const blueWarriors = blueCastle.warriors.filter(warrior => warrior.position === meetingPositions);
+            const redWarriors = redCastle.warriors.filter(warrior => warrior.position === meetingPositions);
+            
+            
             for (const blueWarrior of blueWarriors) {
                 // Find the first living red warrior
                 const targetRedWarrior = redWarriors.find(redWarrior => redWarrior.healthPoints > 0);
@@ -55,6 +39,7 @@ function startFight() {
             }
             
             console.log("Red attack now ");
+            //alert("redataque");
             // Red warriors attack blue warriors
             for (const redWarrior of redWarriors) {
                 // Find the first living blue warrior
@@ -81,16 +66,16 @@ function startFight() {
   
             console.log("Blue warriors:", blueWarriors);
             console.log("Red warriors:", redWarriors);
-        }
-        
+        //}
+        //alert(blueCastle.warriors.length+""+blueWarriors.length+"end redataque"+redCastle.warriors.length+''+redWarriors.length);
         // Check if blue team is defeated
-        if (blueCastle.warriors.length === 0) {
+        if (blueWarriors.length === 0) {
             //alert('Red team wins!');
             break; // End the fight
         }
   
         // Check if red team is defeated
-        if (redCastle.warriors.length === 0) {
+        if (redWarriors.length === 0) {
             //alert('Blue team wins!');
             break; // End the fight
         }
