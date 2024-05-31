@@ -8,18 +8,17 @@ function displayWarriorsOnTrack() {
     // Loop through each castle's warriors and display them on the track
     [redCastle, blueCastle].forEach(castle => {
       castle.warriors.forEach(warrior => {
-        const tileIndex = warrior.position - 1; // Adjust position to match array index
-        const tile = document.getElementById(`p${tileIndex + 1}`); // Get corresponding tile element
-        const warriorContainer = document.createElement('div'); // Create a container for the warrior and health bar
-        warriorContainer.classList.add('warrior-container'); // Add class name 'warrior-container' to the container
+         const tile = document.getElementById(`p${warrior.position}`); 
+        const warriorContainer = document.createElement('div'); 
+        warriorContainer.classList.add('warrior-container'); 
         
-        const warriorImage = document.createElement('img'); // Create image element for the warrior
-        warriorImage.classList.add('img'); // Add class name 'img' to the image element
-        warriorImage.src = warrior.imageUrl; // Set image source
-        warriorImage.alt = warrior.constructor.name; // Set image alt attribute
+        const warriorImage = document.createElement('img'); 
+        warriorImage.classList.add('img'); 
+        warriorImage.src = warrior.imageUrl; 
+        warriorImage.alt = warrior.constructor.name; 
         
-        const healthBar = document.createElement('div'); // Create health bar element
-        healthBar.classList.add('health-bar'); // Add class name 'health-bar' to the health bar element
+        const healthBar = document.createElement('div'); 
+        healthBar.classList.add('health-bar'); 
         
         if (warrior.healthPoints <= 100) {
           healthBar.style.width = `${warrior.healthPoints}%`; // Set width based on warrior's health points
@@ -35,9 +34,9 @@ function displayWarriorsOnTrack() {
           healthBar.appendChild(extraHealthBar); // Append extra health bar to the health bar container
         }
         
-        warriorContainer.appendChild(warriorImage); // Append warrior image to the container
-        warriorContainer.appendChild(healthBar); // Append health bar to the container
-        tile.appendChild(warriorContainer); // Append warrior container to the tile
+        warriorContainer.appendChild(warriorImage); 
+        warriorContainer.appendChild(healthBar); 
+        tile.appendChild(warriorContainer); 
       });
     });
   }

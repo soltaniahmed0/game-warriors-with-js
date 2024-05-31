@@ -3,7 +3,20 @@
 const redCastle = new Chateau("red");
 const blueCastle = new Chateau("blue");
 var points;
-// Add event listeners for blue castle buttons
+var worr={"elf":"elf","chief-elf":"chief-elf","nain":"nain","chief-nain":"chief-nain"}
+Object.entries(worr).forEach(([key, selector]) => {
+  console.log(selector);
+  document.querySelector(".B"+selector).addEventListener("click", function() {
+    blueCastle.addWarrior(key);
+    updateResources();
+  });
+  document.querySelector(".R"+selector).addEventListener("click", function() {
+    redCastle.addWarrior(key);
+    updateResources();
+  });
+  console.log(selector);
+});
+/* Add event listeners for blue castle buttons
 document.querySelector(".Belf").addEventListener("click", function() {
   blueCastle.addWarrior("elf");
   updateBlueResources();
@@ -45,30 +58,16 @@ document.querySelector(".Rchief-nain").addEventListener("click", function() {
   redCastle.addWarrior("chief-nain");
   updateRedResources();
 });
-
+*/
 document.getElementById("move").addEventListener("click", function() {
   moveWarriorsOneStep(); // Call the moveWarriorsOneStep function when the button is clicked
 });
 // Function to update resources display for blue castle
-function updateBlueResources() {
+function updateResources() {
   document.getElementById("blue-resources").textContent = blueCastle.resources;
-}
-
-// Function to update resources display for red castle
-function updateRedResources() {
   document.getElementById("red-resources").textContent = redCastle.resources;
 }
 
 
-
-
-
-// Function to move warriors one step on the track
-// Function to move warriors one step on the track
-
-
-// Example of calling moveWarriorsOneStep function
-// Call this function whenever you want to move the warriors one step (e.g., when a button is clicked)
-// Add event listener to the "move" button
 
 

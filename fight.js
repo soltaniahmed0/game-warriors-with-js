@@ -98,8 +98,7 @@ function startFight() {
   
     redCastle.resources += 1;
     blueCastle.resources += 1;
-    updateBlueResources();
-    updateRedResources();
+    updateResources();
   }
   
   // Define the sleep function
